@@ -10,10 +10,10 @@ import bytecode from "./contracts/bytecode.js";
 import { ethers, ContractFactory } from "ethers";
 
 const network = "testnet";
+const explorerURL = `https://hashscan.io/${network}`;
+
 const provider = new ethers.providers.JsonRpcProvider(`https://${network}.hashio.io/api`);
 const signer = new ethers.Wallet(process.env.OPERATOR_PVKEY_HEX, provider);
-
-const explorerURL = `https://hashscan.io/${network}`;
 
 async function main() {
 	// STEP 1 ===================================
