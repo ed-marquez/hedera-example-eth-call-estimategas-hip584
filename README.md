@@ -20,6 +20,11 @@ The `index.js` file in this repository shows how to interact with the Hedera net
 - Estimate the gas required for a state-changing operation using `eth_estimateGas`.
 - Execute a contract function that changes the state of the contract based on that estimated gas.
 
+Here's the sample output:
+
+![Output](https://github.com/ed-marquez/hedera-example-eth-call-estimategas-hip584/assets/72571340/8bb72dfb-7a53-464e-a13c-8b4cae52c66d)
+
+
 ## Try This Example Quickly on GitPod
 
 [Click here to open on GitPod](https://gitpod.io/#https://github.com/ed-marquez/hedera-example-eth-call-estimategas-hip584)
