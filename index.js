@@ -20,16 +20,20 @@ async function main() {
 	console.log(`\nSTEP 1 ===================================\n`);
 	console.log(`- Deploy the smart contract...\n`);
 
+	// Set a gas limit for the contract deployment transaction.
 	let gasLimit = 4000000;
 
-	// Parameters to pass to the constructor of the contract
-	const itemName = "Spaceships";
-	const itemAmount = 150;
+	// Define the initial parameters for the smart contract's constructor.
+	const itemName = "Spaceships"; // This will be the name to set in the contract's inventory.
+	const itemAmount = 150; // This will be the amount associated with the item name in the contract's inventory.
 
+	// Create a new ContractFactory instance which is used to deploy new smart contracts.
+	// The abi (Application Binary Interface) and bytecode are the compiled contract artifacts.
 	const newContract = new ContractFactory(abi, bytecode, signer);
-	const contractDeployTx = await newContract.deploy(itemName, itemAmount, { gasLimit: gasLimit });
-	const contractDeployRx = await contractDeployTx.deployTransaction.wait();
-	const contractAddress = contractDeployRx.contractAddress;
+	const contractDeployTx = await newContract.deploy(itemName, itemAmount, { gasLimit: gasLimit }); // Deploy the contract with the specified constructor arguments (itemName, itemAmount) and the previously set gas limit.
+	const contractDeployRx = await contractDeployTx.deployTransaction.wait(); // Wait for the deployment transaction to complete.
+
+	const contractAddress = contractDeployRx.contractAddress; //// Obtain the address of the newly deployed contract.
 	console.log(`- Contract deployed to address: ${contractAddress} ✅`);
 	console.log(`- See details in HashScan: \n ${explorerURL}/address/${contractAddress} \n `);
 
