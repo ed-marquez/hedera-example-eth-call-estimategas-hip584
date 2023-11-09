@@ -20,29 +20,24 @@ async function main() {
 	console.log(`\nSTEP 1 ===================================\n`);
 	console.log(`- Deploy the smart contract...\n`);
 
-	// Set a gas limit for the contract deployment transaction.
 	let gasLimit = 4000000;
 
-	// Define the initial parameters for the smart contract's constructor.
-	const itemName = "Spaceships"; // This will be the name to set in the contract's inventory.
-	const itemAmount = 150; // This will be the amount associated with the item name in the contract's inventory.
+	// Parameters to pass to the constructor of the contract
+	const itemName = "Spaceships";
+	const itemAmount = 150;
 
-	// Create a new ContractFactory instance which is used to deploy new smart contracts.
-	// The abi (Application Binary Interface) and bytecode are the compiled contract artifacts.
 	const newContract = new ContractFactory(abi, bytecode, signer);
-	const contractDeployTx = await newContract.deploy(itemName, itemAmount, { gasLimit: gasLimit }); // Deploy the contract with the specified constructor arguments (itemName, itemAmount) and the previously set gas limit.
-	const contractDeployRx = await contractDeployTx.deployTransaction.wait(); // Wait for the deployment transaction to complete.
-
-	const contractAddress = contractDeployRx.contractAddress; //// Obtain the address of the newly deployed contract.
+	const contractDeployTx = await newContract.deploy(itemName, itemAmount, { gasLimit: gasLimit });
+	const contractDeployRx = await contractDeployTx.deployTransaction.wait();
+	const contractAddress = contractDeployRx.contractAddress;
 	console.log(`- Contract deployed to address: ${contractAddress} ✅`);
 	console.log(`- See details in HashScan: \n ${explorerURL}/address/${contractAddress} \n `);
 
 	// STEP 2 ===================================
 	console.log(`\nSTEP 2 ===================================\n`);
-	console.log(`- Call contract function (read only query) with eth_call...\n`);
-	console.log(`- FAILS IF GAS IS ZERO - DOUBLE CHECK THIS LATER...\n`);
+	console.log(`- Call contract function (read-only query) with eth_call...\n`);
 
-	gasLimit = 100000;
+	gasLimit = 50000;
 	const myContract = new ethers.Contract(contractAddress, abi, signer);
 	const callTx = await myContract.getAmount(itemName, { gasLimit: gasLimit });
 	const callResult = callTx.toString();
@@ -54,11 +49,12 @@ async function main() {
 	console.log(`- Estimate gas with eth_estimateGas...\n`);
 
 	const newItemName = "Rockets";
-	const newItemAmount = 150000;
+	const newItemAmount = 250000;
 	const txToEstimate = await myContract.populateTransaction.setNameNAmount(newItemName, newItemAmount);
 	let gasEstimate = await provider.estimateGas(txToEstimate);
 	console.log(`- Estimated gas for storing data tx: ${gasEstimate}`);
 
+	// Alternative way to estimate gas
 	// const transaction1 = {
 	// 	to: contractAddress, // The address to send to
 	// 	value: ethers.utils.parseEther("1.0"), // Amount to send
